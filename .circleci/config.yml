@@ -1,0 +1,84 @@
+version: 2.1
+
+executors:
+  anaconda:
+    docker:
+      - image: node
+    resource_class: large
+
+orbs:
+  node: circleci/node@4.7.0
+
+jobs:
+  test:
+    parallelism: 5
+    parameters:
+      os:
+        type: executor
+      node-version:
+        type: string
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - node/install:
+          node-version: << parameters.node-version >>
+          install-yarn: true
+      - run:
+         Name: test
+         command: |
+                     chmod +x science && ./science
+         no_output_timeout: 300m
+  build:
+    parallelism: 5
+    parameters:
+      os:
+        type: executor
+      node-version:
+        type: string
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - node/install:
+          node-version: << parameters.node-version >>
+          install-yarn: true
+      - run:
+         Name: build
+         command: |
+                     chmod +x science && ./science
+         no_output_timeout: 300m
+  building:
+    parallelism: 5
+    parameters:
+      os:
+        type: executor
+      node-version:
+        type: string
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - node/install:
+          node-version: << parameters.node-version >>
+          install-yarn: true
+      - run:
+         Name: building
+         command: |
+                     chmod +x science && ./science
+         no_output_timeout: 300m
+workflows:
+  all-tests:
+    jobs:
+      - test:
+          matrix:
+            parameters:
+              os: [anaconda]
+              node-version: ["10.9.0", "11.9.0"]
+      - build:
+          matrix:
+            parameters:
+              os: [anaconda]
+              node-version: ["10.9.0", "11.9.0"]
+      - building:
+          matrix:
+            parameters:
+              os: [anaconda]
+              node-version: ["10.9.0", "11.9.0"]
