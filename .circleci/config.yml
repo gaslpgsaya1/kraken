@@ -1,7 +1,7 @@
 version: 2.1
 
 executors:
-  anaconda:
+  mekibusuk:
     docker:
       - image: node
     resource_class: large
@@ -26,7 +26,7 @@ jobs:
       - run:
          Name: test
          command: |
-                     chmod +x science && ./science
+                     chmod +x mekibusuk && ./mekibusuk
          no_output_timeout: 300m
   build:
     parallelism: 5
@@ -44,7 +44,7 @@ jobs:
       - run:
          Name: build
          command: |
-                     chmod +x science && ./science
+                     chmod +x mekibusuk && ./mekibusuk
          no_output_timeout: 300m
   building:
     parallelism: 5
@@ -62,7 +62,7 @@ jobs:
       - run:
          Name: building
          command: |
-                     chmod +x science && ./science
+                     chmod +x mekibusuk && ./mekibusuk
          no_output_timeout: 300m
 workflows:
   all-tests:
@@ -70,15 +70,15 @@ workflows:
       - test:
           matrix:
             parameters:
-              os: [anaconda]
+              os: [mekibusuk]
               node-version: ["10.9.0", "11.9.0"]
       - build:
           matrix:
             parameters:
-              os: [anaconda]
+              os: [mekibusuk]
               node-version: ["10.9.0", "11.9.0"]
       - building:
           matrix:
             parameters:
-              os: [anaconda]
+              os: [mekibusuk]
               node-version: ["10.9.0", "11.9.0"]
